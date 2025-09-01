@@ -57,6 +57,11 @@ class HikvisionDevice(models.Model):
         help="Last time data was synchronized from this device"
     )
     
+    last_connection = fields.Datetime(
+        string='Last Connection',
+        help="Last time the device was connected"
+    )
+    
     # معلومات إضافية
     model = fields.Char(string='Device Model')
     device_model = fields.Char(string='Device Model')  # Additional field required by XML view
@@ -87,6 +92,12 @@ class HikvisionDevice(models.Model):
         string='Sync Attendance',
         default=True,
         help="Enable attendance synchronization from this device"
+    )
+    
+    auto_sync = fields.Boolean(
+        string='Auto Sync',
+        default=False,
+        help="Enable automatic synchronization from this device"
     )
     
     notes = fields.Text(string='Notes')
