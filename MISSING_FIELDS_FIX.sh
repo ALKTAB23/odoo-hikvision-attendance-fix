@@ -1,3 +1,31 @@
+#!/bin/bash
+
+# إصلاح الحقول المفقودة في نموذج hikvision.device
+# Fix for missing fields in hikvision.device model
+
+echo "🔧 إصلاح الحقول المفقودة في نموذج Hikvision Device"
+echo "=================================================="
+
+# مسار الملف المطلوب تحديثه
+DEVICE_MODEL_FILE="/opt/odoo16/custom.f.alshouf/hr_hikvision_attendance/models/hikvision_device.py"
+
+echo "📍 الملف المستهدف: $DEVICE_MODEL_FILE"
+
+# التأكد من وجود الملف
+if [ ! -f "$DEVICE_MODEL_FILE" ]; then
+    echo "❌ خطأ: الملف غير موجود: $DEVICE_MODEL_FILE"
+    exit 1
+fi
+
+# إنشاء نسخة احتياطية
+BACKUP_FILE="${DEVICE_MODEL_FILE}.backup.$(date +%Y%m%d_%H%M%S)"
+echo "💾 إنشاء نسخة احتياطية: $BACKUP_FILE"
+sudo cp "$DEVICE_MODEL_FILE" "$BACKUP_FILE"
+
+echo "🔧 تحديث النموذج مع الحقول المفقودة..."
+
+# إنشاء الملف المحدث مع جميع الحقول المطلوبة
+sudo tee "$DEVICE_MODEL_FILE" > /dev/null << 'EOF'
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
@@ -57,13 +85,13 @@ class HikvisionDevice(models.Model):
         help="Last time data was synchronized from this device"
     )
     
-    # معلومات إضافية
+    # معلومات إضافية - الحقول المطلوبة لـ XML view
     model = fields.Char(string='Device Model')
-    device_model = fields.Char(string='Device Model')  # Additional field required by XML view
+    device_model = fields.Char(string='Device Model')  # مطلوب للـ XML view
     serial_number = fields.Char(string='Serial Number')
     firmware_version = fields.Char(string='Firmware Version')
     
-    # حقول العداد
+    # حقول العداد المطلوبة للـ XML view
     employee_count = fields.Integer(
         string='Employee Count',
         compute='_compute_employee_count',
@@ -93,7 +121,7 @@ class HikvisionDevice(models.Model):
 
     @api.depends('name')
     def _compute_employee_count(self):
-        """Compute the number of employees registered on this device"""
+        """حساب عدد الموظفين المسجلين على هذا الجهاز"""
         for record in self:
             # هنا يمكن إضافة منطق حساب عدد الموظفين الفعلي
             # مثال: البحث في جدول الموظفين المربوطين بهذا الجهاز
@@ -101,7 +129,7 @@ class HikvisionDevice(models.Model):
     
     @api.depends('name')
     def _compute_attendance_count(self):
-        """Compute the number of attendance records from this device"""
+        """حساب عدد سجلات الحضور من هذا الجهاز"""
         for record in self:
             # هنا يمكن إضافة منطق حساب عدد سجلات الحضور الفعلي
             # مثال: البحث في جدول سجلات الحضور من هذا الجهاز
@@ -176,3 +204,32 @@ class HikvisionDevice(models.Model):
                     'type': 'danger',
                 }
             }
+EOF
+
+# تعيين الصلاحيات المناسبة
+sudo chmod 644 "$DEVICE_MODEL_FILE"
+
+echo "✅ تم تحديث النموذج بالحقول المفقودة!"
+
+# إعادة تشغيل Odoo
+echo "🔄 إعادة تشغيل خدمة Odoo..."
+sudo systemctl restart odoo16
+
+echo ""
+echo "🎉 تم الانتهاء من إصلاح الحقول المفقودة!"
+echo "=============================================="
+echo "✅ تم إضافة الحقول المطلوبة:"
+echo "   - device_model"
+echo "   - employee_count (computed field)"
+echo "   - attendance_count (computed field)"
+echo "✅ تم إنشاء نسخة احتياطية: $BACKUP_FILE"
+echo "✅ تم إعادة تشغيل Odoo"
+echo ""
+echo "📋 الخطوات التالية:"
+echo "1. انتظر دقيقة لإعادة تشغيل Odoo"
+echo "2. جرب ترقية الوحدة مرة أخرى"
+echo "3. يجب أن تختفي رسالة خطأ الحقول المفقودة"
+echo ""
+echo "🔧 في حالة المشاكل، استعد النسخة الاحتياطية:"
+echo "   sudo cp $BACKUP_FILE $DEVICE_MODEL_FILE"
+EOF

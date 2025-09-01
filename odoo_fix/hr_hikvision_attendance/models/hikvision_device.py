@@ -59,8 +59,22 @@ class HikvisionDevice(models.Model):
     
     # معلومات إضافية
     model = fields.Char(string='Device Model')
+    device_model = fields.Char(string='Device Model')  # Additional field required by XML view
     serial_number = fields.Char(string='Serial Number')
     firmware_version = fields.Char(string='Firmware Version')
+    
+    # حقول العداد
+    employee_count = fields.Integer(
+        string='Employee Count',
+        compute='_compute_employee_count',
+        help="Number of employees registered on this device"
+    )
+    
+    attendance_count = fields.Integer(
+        string='Attendance Count', 
+        compute='_compute_attendance_count',
+        help="Number of attendance records from this device"
+    )
     
     # إعدادات المزامنة
     sync_employees = fields.Boolean(
@@ -76,6 +90,22 @@ class HikvisionDevice(models.Model):
     )
     
     notes = fields.Text(string='Notes')
+
+    @api.depends('name')
+    def _compute_employee_count(self):
+        """Compute the number of employees registered on this device"""
+        for record in self:
+            # هنا يمكن إضافة منطق حساب عدد الموظفين الفعلي
+            # مثال: البحث في جدول الموظفين المربوطين بهذا الجهاز
+            record.employee_count = 0  # قيمة افتراضية للآن
+    
+    @api.depends('name')
+    def _compute_attendance_count(self):
+        """Compute the number of attendance records from this device"""
+        for record in self:
+            # هنا يمكن إضافة منطق حساب عدد سجلات الحضور الفعلي
+            # مثال: البحث في جدول سجلات الحضور من هذا الجهاز
+            record.attendance_count = 0  # قيمة افتراضية للآن
 
     @api.model
     def test_connection(self):
