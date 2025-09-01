@@ -52,6 +52,24 @@ class HikvisionDevice(models.Model):
         help="Password for device authentication"
     )
     
+    timeout = fields.Integer(
+        string='Timeout',
+        default=30,
+        help="Connection timeout in seconds"
+    )
+    
+    use_https = fields.Boolean(
+        string='Use HTTPS',
+        default=False,
+        help="Use HTTPS for secure connection"
+    )
+    
+    verify_ssl = fields.Boolean(
+        string='Verify SSL',
+        default=True,
+        help="Verify SSL certificates when using HTTPS"
+    )
+    
     is_active = fields.Boolean(
         string='Active',
         default=True,
