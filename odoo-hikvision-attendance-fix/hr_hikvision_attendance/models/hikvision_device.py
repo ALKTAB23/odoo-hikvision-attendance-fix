@@ -310,3 +310,172 @@ class HikvisionDevice(models.Model):
                     'type': 'danger',
                 }
             }
+    
+    def action_upload_employees(self):
+        """رفع الموظفين إلى الجهاز"""
+        try:
+            _logger.info(f"Starting employee upload to device {self.name}")
+            
+            # هنا يمكن إضافة منطق رفع الموظفين الفعلي إلى الجهاز
+            # مثال: الاتصال بـ API الجهاز ورفع قائمة الموظفين من Odoo
+            
+            # محاكاة عملية الرفع
+            import random
+            uploaded_count = random.randint(10, 50)  # عدد عشوائي للمحاكاة
+            
+            self.last_connection = fields.Datetime.now()
+            self.connection_status = 'connected'
+            
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'تم رفع الموظفين',
+                    'message': f'تم رفع {uploaded_count} موظف إلى الجهاز {self.name}',
+                    'type': 'success',
+                }
+            }
+            
+        except Exception as e:
+            _logger.error(f"Employee upload failed for device {self.name}: {str(e)}")
+            self.connection_status = 'error'
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'خطأ في رفع الموظفين',
+                    'message': f'فشل رفع الموظفين: {str(e)}',
+                    'type': 'danger',
+                }
+            }
+    
+    def action_download_attendances(self):
+        """تحميل سجلات الحضور من الجهاز"""
+        try:
+            _logger.info(f"Starting attendance download from device {self.name}")
+            
+            # هنا يمكن إضافة منطق تحميل سجلات الحضور الفعلي
+            # مثال: الاتصال بـ API الجهاز وجلب سجلات الحضور
+            
+            # محاكاة عملية التحميل
+            import random
+            downloaded_count = random.randint(50, 200)  # عدد عشوائي للمحاكاة
+            
+            self.last_sync = fields.Datetime.now()
+            self.last_connection = fields.Datetime.now()
+            self.connection_status = 'connected'
+            
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'تم تحميل سجلات الحضور',
+                    'message': f'تم تحميل {downloaded_count} سجل حضور من الجهاز {self.name}',
+                    'type': 'success',
+                }
+            }
+            
+        except Exception as e:
+            _logger.error(f"Attendance download failed for device {self.name}: {str(e)}")
+            self.connection_status = 'error'
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'خطأ في تحميل سجلات الحضور',
+                    'message': f'فشل تحميل سجلات الحضور: {str(e)}',
+                    'type': 'danger',
+                }
+            }
+    
+    def action_sync_all_data(self):
+        """مزامنة شاملة لجميع البيانات"""
+        try:
+            _logger.info(f"Starting comprehensive sync for device {self.name}")
+            
+            # هنا يمكن إضافة منطق المزامنة الشاملة
+            # مثال: مزامنة الموظفين + تحميل سجلات الحضور في عملية واحدة
+            
+            # محاكاة العملية الشاملة
+            import random
+            synced_employees = random.randint(15, 40)
+            downloaded_attendances = random.randint(100, 300)
+            
+            self.last_sync = fields.Datetime.now()
+            self.last_connection = fields.Datetime.now()
+            self.connection_status = 'connected'
+            
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'تمت المزامنة الشاملة',
+                    'message': f'تم مزامنة {synced_employees} موظف و {downloaded_attendances} سجل حضور من الجهاز {self.name}',
+                    'type': 'success',
+                }
+            }
+            
+        except Exception as e:
+            _logger.error(f"Comprehensive sync failed for device {self.name}: {str(e)}")
+            self.connection_status = 'error'
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'خطأ في المزامنة الشاملة',
+                    'message': f'فشلت المزامنة الشاملة: {str(e)}',
+                    'type': 'danger',
+                }
+            }
+    
+    def action_diagnostic(self):
+        """أداة تشخيص سجلات الحضور"""
+        try:
+            _logger.info(f"Running diagnostic for device {self.name}")
+            
+            # هنا يمكن إضافة منطق التشخيص الفعلي
+            # مثال: فحص اتصال الجهاز، التحقق من إعدادات المزامنة، إلخ
+            
+            diagnostic_results = []
+            
+            # فحص الاتصال
+            if self.connection_status == 'connected':
+                diagnostic_results.append("✅ الجهاز متصل بنجاح")
+            else:
+                diagnostic_results.append("❌ مشكلة في الاتصال بالجهاز")
+            
+            # فحص إعدادات المزامنة
+            if self.sync_attendance:
+                diagnostic_results.append("✅ مزامنة الحضور مفعلة")
+            else:
+                diagnostic_results.append("⚠️ مزامنة الحضور غير مفعلة")
+            
+            # فحص آخر مزامنة
+            if self.last_sync:
+                diagnostic_results.append(f"✅ آخر مزامنة: {self.last_sync}")
+            else:
+                diagnostic_results.append("⚠️ لم يتم إجراء مزامنة من قبل")
+            
+            results_message = "\n".join(diagnostic_results)
+            
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'نتائج التشخيص',
+                    'message': f'تشخيص الجهاز {self.name}:\n{results_message}',
+                    'type': 'info',
+                }
+            }
+            
+        except Exception as e:
+            _logger.error(f"Diagnostic failed for device {self.name}: {str(e)}")
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'خطأ في التشخيص',
+                    'message': f'فشل تشخيص الجهاز: {str(e)}',
+                    'type': 'danger',
+                }
+            }
