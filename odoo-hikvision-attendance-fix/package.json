@@ -1,0 +1,48 @@
+{
+  "name": "odoo-hikvision-attendance-fix",
+  "version": "1.0.0",
+  "description": "Fix for Odoo 16 hr_hikvision_attendance module upgrade error with Arabic support",
+  "main": "hr_hikvision_attendance/models/hikvision_sync_wizard.py",
+  "scripts": {
+    "deploy": "./deploy_fix.sh",
+    "deploy-arabic": "./deploy_fix_arabic.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YOUR_USERNAME/odoo-hikvision-attendance-fix.git"
+  },
+  "keywords": [
+    "odoo",
+    "hikvision",
+    "attendance",
+    "arabic",
+    "python",
+    "xml",
+    "fix",
+    "hr-module",
+    "erp",
+    "odoo16"
+  ],
+  "author": "GenSpark AI Developer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/odoo-hikvision-attendance-fix/issues"
+  },
+  "homepage": "https://github.com/YOUR_USERNAME/odoo-hikvision-attendance-fix#readme",
+  "odoo": {
+    "version": "16.0",
+    "module": "hr_hikvision_attendance",
+    "languages": ["en_US", "ar_SA"],
+    "depends": ["hr", "hr_attendance"]
+  },
+  "files": [
+    "hr_hikvision_attendance/",
+    "README.md",
+    "README_Arabic.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    "deploy_fix.sh",
+    "deploy_fix_arabic.sh"
+  ]
+}
