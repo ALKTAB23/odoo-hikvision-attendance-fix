@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hikvision_sync_wizard_form" model="ir.ui.view">
+        <field name="name">hikvision.sync.wizard.form</field>
+        <field name="model">hikvision.sync.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Hikvision Sync Wizard">
+                <header>
+                    <button name="action_sync_employees_only" type="object" string="مزامنة الموظفين فقط" class="btn-success" icon="fa-users" attrs="{'invisible': [('sync_employees', '=', False)]}"/>
+                    <button name="action_sync_attendances_only" type="object" string="مزامنة سجلات الحضور فقط" class="btn-info" icon="fa-clock-o" attrs="{'invisible': [('sync_attendances', '=', False)]}"/>
+                    <button name="action_sync_all_data" type="object" string="مزامنة شاملة" class="btn-primary" icon="fa-refresh"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="sync_employees"/>
+                        <field name="sync_attendances"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
