@@ -29,6 +29,18 @@ class HikvisionDevice(models.Model):
         help="Port number for device connection"
     )
     
+    connection_type = fields.Selection([
+        ('http', 'HTTP Connection'),
+        ('sdk', 'SDK Connection'),
+        ('tcp', 'TCP Connection')
+    ], string='Connection Type', default='http', help="Type of connection to use with the device")
+    
+    sdk_port = fields.Integer(
+        string='SDK Port',
+        default=8000,
+        help="SDK port for device connection (used when connection type is SDK)"
+    )
+    
     username = fields.Char(
         string='Username',
         default='admin',
